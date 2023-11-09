@@ -49,59 +49,52 @@ let finalArr = [];
     |       |               |            |          |
     +-----------------------------------------------+
 */
+
+let seq = 0;
 let cellInfos = [
-    { xsc: 0, xec: 1, ysc: 0, yec: 1, word: "1" },
-    { xsc: 1, xec: 2, ysc: 0, yec: 1, word: "2" },
-    { xsc: 2, xec: 4, ysc: 0, yec: 1, word: "3" },
+    // { xsc: 0, xec: 1, ysc: 0, yec: 1, word: "1", id: seq++ },
+    // { xsc: 1, xec: 2, ysc: 0, yec: 1, word: "2", id: seq++ },
+    // { xsc: 2, xec: 4, ysc: 0, yec: 1, word: "3", id: seq++ },
 
-    // 常规表格
-    { xsc: 0, xec: 1, ysc: 1, yec: 2, word: "4" },
-    { xsc: 1, xec: 2, ysc: 1, yec: 2, word: "5" },
-    { xsc: 2, xec: 3, ysc: 1, yec: 2, word: "6" },
-    { xsc: 3, xec: 4, ysc: 1, yec: 2, word: "7" },
-    { xsc: 0, xec: 1, ysc: 2, yec: 3, word: "8" },
-    { xsc: 1, xec: 2, ysc: 2, yec: 3, word: "9" },
-    { xsc: 2, xec: 3, ysc: 2, yec: 3, word: "10" },
-    { xsc: 3, xec: 4, ysc: 2, yec: 3, word: "11" },
-    // 左侧存在合成表格
-    { xsc: 0, xec: 1, ysc: 3, yec: 5, word: "12" },
-    { xsc: 1, xec: 2, ysc: 3, yec: 4, word: "13" },
-    { xsc: 2, xec: 3, ysc: 3, yec: 4, word: "14" },
-    { xsc: 1, xec: 2, ysc: 4, yec: 5, word: "15" },
-    { xsc: 2, xec: 3, ysc: 4, yec: 5, word: "16" },
-    // 右侧存在合成表格
-    { xsc: 0, xec: 1, ysc: 5, yec: 7, word: "17" },
-    { xsc: 1, xec: 4, ysc: 5, yec: 7, word: "18" },
-    { xsc: 4, xec: 6, ysc: 5, yec: 8, word: "19" },
-    { xsc: 0, xec: 1, ysc: 7, yec: 8, word: "20" },
-    { xsc: 1, xec: 4, ysc: 7, yec: 8, word: "21" },
+    // // 常规表格
+    // { xsc: 0, xec: 1, ysc: 1, yec: 2, word: "4", id: seq++ },
+    // { xsc: 1, xec: 2, ysc: 1, yec: 2, word: "5", id: seq++ },
+    // { xsc: 2, xec: 3, ysc: 1, yec: 2, word: "6", id: seq++ },
+    // { xsc: 3, xec: 4, ysc: 1, yec: 2, word: "7", id: seq++ },
+    // { xsc: 0, xec: 1, ysc: 2, yec: 3, word: "8", id: seq++ },
+    // { xsc: 1, xec: 2, ysc: 2, yec: 3, word: "9", id: seq++ },
+    // { xsc: 2, xec: 3, ysc: 2, yec: 3, word: "10", id: seq++ },
+    // { xsc: 3, xec: 4, ysc: 2, yec: 3, word: "11", id: seq++ },
+    // // 左侧存在合成表格
+    { xsc: 0, xec: 1, ysc: 3, yec: 6, word: "12", id: seq++ },
+    { xsc: 1, xec: 2, ysc: 3, yec: 4, word: "13", id: seq++ },
+    { xsc: 2, xec: 3, ysc: 3, yec: 4, word: "14", id: seq++ },
+    { xsc: 1, xec: 2, ysc: 4, yec: 5, word: "15", id: seq++ },
+    { xsc: 2, xec: 3, ysc: 4, yec: 5, word: "16", id: seq++ },
+    { xsc: 1, xec: 2, ysc: 5, yec: 6, word: "a-1", id: seq++ },
+    { xsc: 2, xec: 3, ysc: 5, yec: 6, word: "a-2", id: seq++ },
+
     // 合成表格存在两侧
-    { xsc: 0, xec: 1, ysc: 3, yec: 5, word: "999" },
-    { xsc: 1, xec: 2, ysc: 3, yec: 4, word: "999" },
-    { xsc: 2, xec: 3, ysc: 3, yec: 4, word: "999" },
-    { xsc: 3, xec: 4, ysc: 3, yec: 5, word: "999" },
-    { xsc: 1, xec: 2, ysc: 4, yec: 5, word: "999" },
-    { xsc: 2, xec: 3, ysc: 4, yec: 5, word: "999" },
-    // 右侧存在合成表格
-    { xsc: 0, xec: 1, ysc: 5, yec: 7, word: "22" },
-    { xsc: 1, xec: 4, ysc: 5, yec: 7, word: "23" },
-    { xsc: 4, xec: 6, ysc: 5, yec: 8, word: "24" },
-    { xsc: 0, xec: 1, ysc: 7, yec: 8, word: "25" },
-    { xsc: 1, xec: 4, ysc: 7, yec: 8, word: "26" },
-    // 不是表格
-    { xsc: 0, xec: 1, ysc: 0, yec: 1, word: "999" },
-    { xsc: 1, xec: 2, ysc: 0, yec: 1, word: "999" },
-    { xsc: 2, xec: 4, ysc: 0, yec: 1, word: "999" },
+    { xsc: 0, xec: 1, ysc: 6, yec: 8, word: "999", id: seq++ },
+    { xsc: 1, xec: 2, ysc: 6, yec: 7, word: "999", id: seq++ },
+    { xsc: 2, xec: 3, ysc: 6, yec: 7, word: "999", id: seq++ },
+    { xsc: 3, xec: 4, ysc: 6, yec: 7, word: "999", id: seq++ },
+    { xsc: 4, xec: 5, ysc: 6, yec: 8, word: "999", id: seq++ },
+    { xsc: 1, xec: 2, ysc: 7, yec: 8, word: "999", id: seq++ },
+    { xsc: 2, xec: 3, ysc: 7, yec: 8, word: "999", id: seq++ },
+    { xsc: 3, xec: 4, ysc: 7, yec: 8, word: "999", id: seq++ },
 
-    // 常规表格
-    { xsc: 0, xec: 1, ysc: 1, yec: 2, word: "27" },
-    { xsc: 1, xec: 2, ysc: 1, yec: 2, word: "28" },
-    { xsc: 2, xec: 3, ysc: 1, yec: 2, word: "29" },
-    { xsc: 3, xec: 4, ysc: 1, yec: 2, word: "30" },
-    { xsc: 0, xec: 1, ysc: 2, yec: 3, word: "31" },
-    { xsc: 1, xec: 2, ysc: 2, yec: 3, word: "32" },
-    { xsc: 2, xec: 3, ysc: 2, yec: 3, word: "33" },
-    { xsc: 3, xec: 4, ysc: 2, yec: 3, word: "34" },
+    // 右侧存在合成表格
+    { xsc: 0, xec: 1, ysc: 8, yec: 9, word: "22", id: seq++ },
+    { xsc: 1, xec: 4, ysc: 8, yec: 9, word: "23", id: seq++ },
+    { xsc: 4, xec: 6, ysc: 8, yec: 10, word: "24", id: seq++ },
+    { xsc: 0, xec: 1, ysc: 9, yec: 10, word: "25", id: seq++ },
+    { xsc: 1, xec: 4, ysc: 9, yec: 10, word: "26", id: seq++ },
+
+    // // 只有一列的数据，不进行展示
+    { xsc: 0, xec: 1, ysc: 11, yec: 12, word: "999", id: seq++ },
+    { xsc: 0, xec: 1, ysc: 13, yec: 14, word: "999", id: seq++ },
+    { xsc: 0, xec: 1, ysc: 14, yec: 15, word: "999", id: seq++ },
 
 ];
 
@@ -140,6 +133,7 @@ for (let i = 1; i < cellInfos.length; i++) {
         (cellInfos[i - 1].ysc === cellInfos[i].ysc && i === cellInfos.length - 1)) {
         bChangeRow = true;
 
+        // 针对最后一行最后一列没有换行的情况
         if ((cellInfos[i - 1].ysc === cellInfos[i].ysc && i === cellInfos.length - 1)) {
             nextColumnCount++;
         }
@@ -158,7 +152,8 @@ for (let i = 1; i < cellInfos.length; i++) {
         continue;
     }
 
-    if (bChangeRow) {
+    // console.log("i: ", i, "==preColumnCount: ", preColumnCount, ", nextColumnCount: ", nextColumnCount, "tempPreIndex: ", preStartIndex, ", tempNextIndex: ", nextStartIndex);
+    while (bChangeRow) {
         /* 换行的情况下判断是否满足常规表格
             不满足的条件：两行的第一个表格xsc不相同 或者 两行的最后一个表格xec不相同
             满足常规表格的情况下，可以按照常规表格处理，不满足条件的整理出可以按照常规表格处理的部分
@@ -166,11 +161,10 @@ for (let i = 1; i < cellInfos.length; i++) {
         if (cellInfos[preStartIndex].xsc === cellInfos[nextStartIndex].xsc
             && cellInfos[preStartIndex + preColumnCount - 1].xec === cellInfos[nextStartIndex + nextColumnCount - 1].xec
             && !bSeachAbNormal) {
-            // console.log("preColumnCount: ", preColumnCount, ", nextColumnCount: ", nextColumnCount);
             if (preColumnCount === nextColumnCount) {
                 let tempPreIndex = preStartIndex;
                 let tempNextIndex = nextStartIndex;
-                console.log("tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
+                console.log("++tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
                 for (let tempIndex = 0; tempIndex < preColumnCount; tempIndex++) {
                     // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
                     if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
@@ -218,36 +212,39 @@ for (let i = 1; i < cellInfos.length; i++) {
             if (bNormalSearch) {
                 bNormalSearch = false;
             }
-            // 规避表格宽度不等的情况下，误认为有合成表格
-            let bComposite = true;
-            // 不足两列的表格组不成合成表格的特性
-            if (preColumnCount >= 2 && !abNormalTabInfo.bCompositeTabLeft && !abNormalTabInfo.bCompositeTabRight) {
-                let topYsc;
-                let bottomYec;
-                if (!abNormalTabInfo.bCompositeTabLeft && cellInfos[preStartIndex].xsc !== cellInfos[nextStartIndex].xsc) {
-                    topYsc = cellInfos[preStartIndex].ysc;
-                    bottomYec = cellInfos[preStartIndex].yec;
-                }
-                else if (!abNormalTabInfo.bCompositeTabRight
-                    && cellInfos[preStartIndex + preColumnCount - 1].xec !== cellInfos[nextStartIndex + nextColumnCount - 1].xec) {
-                    topYsc = cellInfos[preStartIndex + preColumnCount - 1].ysc;
-                    bottomYec = cellInfos[preStartIndex + preColumnCount - 1].yec;
-                }
 
-                for (let index = nextStartIndex; index < nextStartIndex + nextColumnCount; index++) {
-                    if (cellInfos[index].ysc < topYsc || cellInfos[index].yec > bottomYec) {
-                        bComposite = false;
+            // 检测第一行非合成格的起始纵坐标和第二行的结束纵坐标是否在合成表格的起始和终止纵坐标范围内
+            // 规避表格宽度不等的情况下，误认为有合成表格 
+            let bComposite = true;
+            if (!bSeachAbNormal) {
+                // 不足两列的表格组不成合成表格的特性
+                if (preColumnCount >= 2 && !abNormalTabInfo.bCompositeTabLeft && !abNormalTabInfo.bCompositeTabRight) {
+                    let topYsc;
+                    let bottomYec;
+                    if (!abNormalTabInfo.bCompositeTabLeft && cellInfos[preStartIndex].xsc !== cellInfos[nextStartIndex].xsc) {
+                        topYsc = cellInfos[preStartIndex].ysc;
+                        bottomYec = cellInfos[preStartIndex].yec;
+                    }
+                    else if (!abNormalTabInfo.bCompositeTabRight
+                        && cellInfos[preStartIndex + preColumnCount - 1].xec !== cellInfos[nextStartIndex + nextColumnCount - 1].xec) {
+                        topYsc = cellInfos[preStartIndex + preColumnCount - 1].ysc;
+                        bottomYec = cellInfos[preStartIndex + preColumnCount - 1].yec;
+                    }
+
+                    for (let index = nextStartIndex; index < nextStartIndex + nextColumnCount; index++) {
+                        if (cellInfos[index].ysc < topYsc || cellInfos[index].yec > bottomYec) {
+                            bComposite = false;
+                        }
                     }
                 }
-            }
-            else {
-                bComposite = false;
+                else {
+                    bComposite = false;
+                }
             }
 
             if (bComposite) {
-
+                // 重置合成表格查找的相关状态变量
                 if (!bSeachAbNormal) {
-                    bSeachAbNormal = true;
                     abNormalTabInfo.bCompositeTabLeft = false;
                     abNormalTabInfo.bCompositeTabRight = false;
                     abNormalTabInfo.bSeachFinish = false;
@@ -255,158 +252,252 @@ for (let i = 1; i < cellInfos.length; i++) {
                     abNormalTabInfo.arrTableInfo = [];
                 }
 
-                console.log("xsc: ", cellInfos[preStartIndex].xsc, "-", cellInfos[nextStartIndex].xsc, " xec: ",
+                console.log("preStartIndex: ", preStartIndex, ", nextStartIndex: ", nextStartIndex, ", xsc: ", cellInfos[preStartIndex].xsc, "-", cellInfos[nextStartIndex].xsc, " xec: ",
                     cellInfos[preStartIndex + preColumnCount - 1].xec, "-", cellInfos[nextStartIndex + nextColumnCount - 1].xec);
-                
-                // 左侧存在跨多行的表格
-                if (!abNormalTabInfo.bCompositeTabLeft && cellInfos[preStartIndex].xsc !== cellInfos[nextStartIndex].xsc) {
-                    abNormalTabInfo.bCompositeTabLeft = true;
-                    abNormalTabInfo.yscLeft = cellInfos[preStartIndex].ysc;
-                    abNormalTabInfo.yecLeft = cellInfos[preStartIndex].yec;
-                    abNormalTabInfo.bSeachFinish = false;
 
-                    abNormalTabInfo.arrTableInfo.push(
-                        {
-                            startIndex: (preStartIndex + 1),
-                            columnCount: (preColumnCount - 1)
-                        }
-                    );
-                    console.log("left abNormalTabInfo.arrTableInfo: ", abNormalTabInfo.arrTableInfo);
-                }
-
-                // 右侧存在跨多行的表格
-                if (!abNormalTabInfo.bCompositeTabRight
-                    && cellInfos[preStartIndex + preColumnCount - 1].xec !== cellInfos[nextStartIndex + nextColumnCount - 1].xec) {
-                    abNormalTabInfo.bCompositeTabRight = true;
-                    abNormalTabInfo.yscRight = cellInfos[preStartIndex + preColumnCount - 1].ysc;
-                    abNormalTabInfo.yecRight = cellInfos[preStartIndex + preColumnCount - 1].yec;
-                    abNormalTabInfo.bSeachFinish = false;
-                    abNormalTabInfo.arrTableInfo.push(
-                        {
-                            startIndex: (preStartIndex),
-                            columnCount: (preColumnCount - 1)
-                        }
-                    );
-                    console.log("right abNormalTabInfo.arrTableInfo: ", abNormalTabInfo.arrTableInfo);
-                }
-
-                // 不支持左右同时存在合成表格的情况，遇到左右同时存在合成表格，则在该返回内的所有表格均不可能符合需要的表格
-                if (abNormalTabInfo.bCompositeTabLeft && abNormalTabInfo.bCompositeTabRight) {
-                    abNormalTabInfo.bSeachFinish = true;
-                    abNormalTabInfo.yEndPos = abNormalTabInfo.yecLeft > abNormalTabInfo.yecRight ? abNormalTabInfo.yecLeft : abNormalTabInfo.yecRight;
-                }
-                else if (abNormalTabInfo.bCompositeTabLeft) {
-                    // 表格需要和合成表格对齐
-                    if (cellInfos[nextStartIndex].yec <= abNormalTabInfo.yecLeft) {
-                        // 还未找到和合成表格纵向平行的最后一行表格,暂时记录数据
-                        abNormalTabInfo.arrTableInfo.push(
-                            {
-                                startIndex: (nextStartIndex),
-                                columnCount: (nextColumnCount)
-                            });
-
-                        // 合成表格查找完成，数据检测判断
-                        if (cellInfos[nextStartIndex].yec === abNormalTabInfo.yecLeft) {
-                            for (let tabIndex = 1; tabIndex < abNormalTabInfo.arrTableInfo.length; tabIndex++) {
-                                if (abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount === abNormalTabInfo.arrTableInfo[tabIndex].columnCount) {
-                                    let tempPreIndex = abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex;
-                                    let tempNextIndex = abNormalTabInfo.arrTableInfo[tabIndex].startIndex;
-                                    console.log("===tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
-                                    for (let tempIndex = 0; tempIndex < abNormalTabInfo.arrTableInfo[tabIndex].columnCount; tempIndex++) {
-                                        // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
-                                        if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
-                                            cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
-                                            bSame = false;
-                                            break;
-                                        }
-                                        tempPreIndex++;
-                                        tempNextIndex++;
-                                    }
-                                }
-                                else {
-                                    bSame = false;
-                                    break;
-                                }
-                            }
-
-                            if (bSame) {
-                                cellInfoSplitInfo.push(abNormalTabInfo.arrTableInfo);
-                            }
-
-                            // 无论是否找到合适的表格，本次合成表格的查询均满足结束条件
+                if (!abNormalTabInfo.bSeachFinish) {
+                    // 左侧存在跨多行的表格
+                    if (!abNormalTabInfo.bCompositeTabLeft && cellInfos[preStartIndex].xsc !== cellInfos[nextStartIndex].xsc
+                        && cellInfos[preStartIndex + preColumnCount - 1].xec === cellInfos[nextStartIndex + nextColumnCount - 1].xec) {
+                        // 左右先后找到了合成表格，已经进入合成状态下再遇到，说明左右合成格纵向起始坐标肯定不是相同的即不在同一行
+                        if (bSeachAbNormal) {
                             abNormalTabInfo.bSeachFinish = true;
-                            abNormalTabInfo.yEndPos = abNormalTabInfo.yecLeft;
+                            abNormalTabInfo.yEndPos = cellInfos[preStartIndex].yec > abNormalTabInfo.yecRight ? cellInfos[preStartIndex].yec : abNormalTabInfo.yecRight;
                         }
+                        else {
+                            abNormalTabInfo.bCompositeTabLeft = true;
+                            abNormalTabInfo.yscLeft = cellInfos[preStartIndex].ysc;
+                            abNormalTabInfo.yecLeft = cellInfos[preStartIndex].yec;
+                            abNormalTabInfo.bSeachFinish = false;
+
+                            abNormalTabInfo.arrTableInfo.push(
+                                {
+                                    startIndex: (preStartIndex + 1),
+                                    columnCount: (preColumnCount - 1)
+                                }
+                            );
+                        }
+                        console.log("left abNormalTabInfo.arrTableInfo: ", abNormalTabInfo.arrTableInfo);
                     }
-                    else {
-                        // 没有与合成表格纵向相等的表格存在
-                        abNormalTabInfo.bSeachFinish = true;
-                        abNormalTabInfo.yEndPos = abNormalTabInfo.yecLeft;
+
+                    // 右侧存在跨多行的表格
+                    if (!abNormalTabInfo.bCompositeTabRight
+                        && cellInfos[preStartIndex + preColumnCount - 1].xec !== cellInfos[nextStartIndex + nextColumnCount - 1].xec
+                        && cellInfos[preStartIndex].xsc === cellInfos[nextStartIndex].xsc) {
+
+                        if (bSeachAbNormal) {
+                            abNormalTabInfo.bSeachFinish = true;
+                            abNormalTabInfo.yEndPos = abNormalTabInfo.yecLeft > cellInfos[preStartIndex + preColumnCount - 1].yec ? abNormalTabInfo.yecLeft : cellInfos[preStartIndex + preColumnCount - 1].yec;
+                        }
+                        else {
+                            abNormalTabInfo.bCompositeTabRight = true;
+                            abNormalTabInfo.yscRight = cellInfos[preStartIndex + preColumnCount - 1].ysc;
+                            abNormalTabInfo.yecRight = cellInfos[preStartIndex + preColumnCount - 1].yec;
+                            abNormalTabInfo.bSeachFinish = false;
+                            abNormalTabInfo.arrTableInfo.push(
+                                {
+                                    startIndex: (preStartIndex),
+                                    columnCount: (preColumnCount - 1)
+                                }
+                            );
+                        }
+                        console.log("right abNormalTabInfo.arrTableInfo: ", abNormalTabInfo.arrTableInfo);
+                    }
+
+                    // 左右两侧同时存在合成格
+                    if (!abNormalTabInfo.bCompositeTabLeft && !abNormalTabInfo.bCompositeTabRight
+                        && cellInfos[preStartIndex].xsc !== cellInfos[nextStartIndex].xsc
+                        && cellInfos[preStartIndex + preColumnCount - 1].xec !== cellInfos[nextStartIndex + nextColumnCount - 1].xec) {
+                        // 合成必须满足上下纵坐标必须相等
+                        if (cellInfos[preStartIndex].ysc !== cellInfos[preStartIndex + preColumnCount - 1].ysc
+                            || cellInfos[preStartIndex].yec !== cellInfos[preStartIndex + preColumnCount - 1].yec) {
+
+                            abNormalTabInfo.bSeachFinish = true;
+                            abNormalTabInfo.yEndPos = cellInfos[preStartIndex].yec > cellInfos[preStartIndex + preColumnCount - 1].yec ? cellInfos[preStartIndex].yec : cellInfos[preStartIndex + preColumnCount - 1].yec;
+                        }
+                        else {
+                            abNormalTabInfo.bCompositeTabLeft = true;
+                            abNormalTabInfo.bCompositeTabRight = true;
+                            abNormalTabInfo.yscRight = cellInfos[preStartIndex + preColumnCount - 1].ysc;
+                            abNormalTabInfo.yecRight = cellInfos[preStartIndex + preColumnCount - 1].yec;
+                            abNormalTabInfo.bSeachFinish = false;
+                            abNormalTabInfo.arrTableInfo.push(
+                                {
+                                    startIndex: (preStartIndex + 1),
+                                    columnCount: (preColumnCount - 2)
+                                }
+                            );
+                        }
+                        console.log("middle abNormalTabInfo.arrTableInfo: ", abNormalTabInfo.arrTableInfo)
                     }
                 }
-                else if(abNormalTabInfo.bCompositeTabRight){
-                    // 表格需要和合成表格对齐
-                    if (cellInfos[nextStartIndex].yec <= abNormalTabInfo.yecRight) {
-                        // 还未找到和合成表格纵向平行的最后一行表格,暂时记录数据
-                        abNormalTabInfo.arrTableInfo.push(
-                            {
-                                startIndex: (nextStartIndex),
-                                columnCount: (nextColumnCount)
-                            });
 
-                        // 合成表格查找完成，数据检测判断
-                        if (cellInfos[nextStartIndex].yec === abNormalTabInfo.yecRight) {
-                            for (let tabIndex = 1; tabIndex < abNormalTabInfo.arrTableInfo.length; tabIndex++) {
-                                if (abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount === abNormalTabInfo.arrTableInfo[tabIndex].columnCount) {
-                                    let tempPreIndex = abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex;
-                                    let tempNextIndex = abNormalTabInfo.arrTableInfo[tabIndex].startIndex;
-                                    console.log("===tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
-                                    for (let tempIndex = 0; tempIndex < abNormalTabInfo.arrTableInfo[tabIndex].columnCount; tempIndex++) {
-                                        // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
-                                        if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
-                                            cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
-                                            bSame = false;
-                                            break;
+                if (!bSeachAbNormal) {
+                    bSeachAbNormal = true;
+                }
+
+                if (!abNormalTabInfo.bSeachFinish) {
+                    // 左右均存在表格
+                    if (abNormalTabInfo.bCompositeTabLeft && abNormalTabInfo.bCompositeTabRight) {
+                        // 表格需要和合成表格对齐
+                        if (cellInfos[nextStartIndex].yec <= abNormalTabInfo.yecRight) {
+                            // 还未找到和合成表格纵向平行的最后一行表格,暂时记录数据
+                            abNormalTabInfo.arrTableInfo.push(
+                                {
+                                    startIndex: (nextStartIndex),
+                                    columnCount: (nextColumnCount)
+                                });
+
+                            // 合成表格查找完成，数据检测判断
+                            if (cellInfos[nextStartIndex].yec === abNormalTabInfo.yecRight) {
+                                for (let tabIndex = 1; tabIndex < abNormalTabInfo.arrTableInfo.length; tabIndex++) {
+                                    if (abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount === abNormalTabInfo.arrTableInfo[tabIndex].columnCount) {
+                                        let tempPreIndex = abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex;
+                                        let tempNextIndex = abNormalTabInfo.arrTableInfo[tabIndex].startIndex;
+                                        console.log("===tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
+                                        for (let tempIndex = 0; tempIndex < abNormalTabInfo.arrTableInfo[tabIndex].columnCount; tempIndex++) {
+                                            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
+                                            if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
+                                                cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
+                                                bSame = false;
+                                                break;
+                                            }
+                                            tempPreIndex++;
+                                            tempNextIndex++;
                                         }
-                                        tempPreIndex++;
-                                        tempNextIndex++;
+                                    }
+                                    else {
+                                        bSame = false;
+                                        break;
                                     }
                                 }
-                                else {
-                                    bSame = false;
-                                    break;
+
+                                if (bSame) {
+                                    cellInfoSplitInfo.push(abNormalTabInfo.arrTableInfo);
                                 }
-                            }
 
-                            if (bSame) {
-                                cellInfoSplitInfo.push(abNormalTabInfo.arrTableInfo);
+                                // 无论是否找到合适的表格，本次合成表格的查询均满足结束条件
+                                abNormalTabInfo.bSeachFinish = true;
+                                abNormalTabInfo.yEndPos = abNormalTabInfo.yecRight;
                             }
-
-                            // 无论是否找到合适的表格，本次合成表格的查询均满足结束条件
+                        }
+                        else {
+                            // 没有与合成表格纵向相等的表格存在
                             abNormalTabInfo.bSeachFinish = true;
                             abNormalTabInfo.yEndPos = abNormalTabInfo.yecRight;
                         }
                     }
-                    else {
-                        // 没有与合成表格纵向相等的表格存在
-                        abNormalTabInfo.bSeachFinish = true;
-                        abNormalTabInfo.yEndPos = abNormalTabInfo.yecRight;
-                    }
-                }
+                    else if (abNormalTabInfo.bCompositeTabLeft) {
+                        // 表格需要和合成表格对齐
+                        if (cellInfos[nextStartIndex].yec <= abNormalTabInfo.yecLeft) {
+                            // 还未找到和合成表格纵向平行的最后一行表格,暂时记录数据
+                            abNormalTabInfo.arrTableInfo.push(
+                                {
+                                    startIndex: (nextStartIndex),
+                                    columnCount: (nextColumnCount)
+                                });
 
-                console.log("bCompositeTabLeft: ", abNormalTabInfo.bCompositeTabLeft, ", bCompositeTabRight: ", abNormalTabInfo.bCompositeTabRight
-                    , ", bSeachFinish: ", abNormalTabInfo.bSeachFinish);
-                if (abNormalTabInfo.bSeachFinish) {
+                            // 合成表格查找完成，数据检测判断
+                            if (cellInfos[nextStartIndex].yec === abNormalTabInfo.yecLeft) {
+                                for (let tabIndex = 1; tabIndex < abNormalTabInfo.arrTableInfo.length; tabIndex++) {
+                                    if (abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount === abNormalTabInfo.arrTableInfo[tabIndex].columnCount) {
+                                        let tempPreIndex = abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex;
+                                        let tempNextIndex = abNormalTabInfo.arrTableInfo[tabIndex].startIndex;
+                                        console.log("===tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
+                                        for (let tempIndex = 0; tempIndex < abNormalTabInfo.arrTableInfo[tabIndex].columnCount; tempIndex++) {
+                                            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
+                                            if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
+                                                cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
+                                                bSame = false;
+                                                break;
+                                            }
+                                            tempPreIndex++;
+                                            tempNextIndex++;
+                                        }
+                                    }
+                                    else {
+                                        bSame = false;
+                                        break;
+                                    }
+                                }
+
+                                if (bSame) {
+                                    cellInfoSplitInfo.push(abNormalTabInfo.arrTableInfo);
+                                }
+
+                                // 无论是否找到合适的表格，本次合成表格的查询均满足结束条件
+                                abNormalTabInfo.bSeachFinish = true;
+                                abNormalTabInfo.yEndPos = abNormalTabInfo.yecLeft;
+                            }
+                        }
+                        else {
+                            // 没有与合成表格纵向相等的表格存在
+                            abNormalTabInfo.bSeachFinish = true;
+                            abNormalTabInfo.yEndPos = abNormalTabInfo.yecLeft;
+                        }
+                    }
+                    else if (abNormalTabInfo.bCompositeTabRight) {
+                        // 表格需要和合成表格对齐
+                        if (cellInfos[nextStartIndex].yec <= abNormalTabInfo.yecRight) {
+                            // 还未找到和合成表格纵向平行的最后一行表格,暂时记录数据
+                            abNormalTabInfo.arrTableInfo.push(
+                                {
+                                    startIndex: (nextStartIndex),
+                                    columnCount: (nextColumnCount)
+                                });
+
+                            // 合成表格查找完成，数据检测判断
+                            if (cellInfos[nextStartIndex].yec === abNormalTabInfo.yecRight) {
+                                for (let tabIndex = 1; tabIndex < abNormalTabInfo.arrTableInfo.length; tabIndex++) {
+                                    if (abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount === abNormalTabInfo.arrTableInfo[tabIndex].columnCount) {
+                                        let tempPreIndex = abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex;
+                                        let tempNextIndex = abNormalTabInfo.arrTableInfo[tabIndex].startIndex;
+                                        console.log("===tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
+                                        for (let tempIndex = 0; tempIndex < abNormalTabInfo.arrTableInfo[tabIndex].columnCount; tempIndex++) {
+                                            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
+                                            if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
+                                                cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
+                                                bSame = false;
+                                                break;
+                                            }
+                                            tempPreIndex++;
+                                            tempNextIndex++;
+                                        }
+                                    }
+                                    else {
+                                        bSame = false;
+                                        break;
+                                    }
+                                }
+
+                                if (bSame) {
+                                    cellInfoSplitInfo.push(abNormalTabInfo.arrTableInfo);
+                                }
+
+                                // 无论是否找到合适的表格，本次合成表格的查询均满足结束条件
+                                abNormalTabInfo.bSeachFinish = true;
+                                abNormalTabInfo.yEndPos = abNormalTabInfo.yecRight;
+                            }
+                        }
+                        else {
+                            // 没有与合成表格纵向相等的表格存在
+                            abNormalTabInfo.bSeachFinish = true;
+                            abNormalTabInfo.yEndPos = abNormalTabInfo.yecRight;
+                        }
+                    }
+
+                    console.log("bCompositeTabLeft: ", abNormalTabInfo.bCompositeTabLeft, ", bCompositeTabRight: ", abNormalTabInfo.bCompositeTabRight
+                        , ", bSeachFinish: ", abNormalTabInfo.bSeachFinish);
+                }
+                else {
                     abNormalTabInfo.bCompositeTabLeft = false;
                     abNormalTabInfo.bCompositeTabRight = false;
                     let bFlag = true;
-                    if (abNormalTabInfo.bCompositeTabLeft && abNormalTabInfo.bCompositeTabRight) {
-                        // 若出现两边均有合成表格的情况下，将纵轴范围内的数据均跳过
-                        for (let index = nextStartIndex; index < nextStartIndex + nextColumnCount; index++) {
-                            console.log("word: ", cellInfos[index].word, ", ysc: ", cellInfos[index].ysc, ", yEndPos: ", abNormalTabInfo.yEndPos);
-                            if (cellInfos[index].ysc < abNormalTabInfo.yEndPos) {
-                                bFlag = false;
-                            }
+                    // 若出现两边均有合成表格的情况下，将纵轴范围内的数据均跳过
+                    for (let index = nextStartIndex; index < nextStartIndex + nextColumnCount; index++) {
+                        console.log("word: ", cellInfos[index].word, ", ysc: ", cellInfos[index].ysc, ", yEndPos: ", abNormalTabInfo.yEndPos);
+                        if (cellInfos[index].ysc < abNormalTabInfo.yEndPos) {
+                            bFlag = false;
                         }
                     }
                     if (bFlag) {
@@ -418,8 +509,16 @@ for (let i = 1; i < cellInfos.length; i++) {
         preStartIndex = nextStartIndex;
         preColumnCount = nextColumnCount;
 
-        nextColumnCount = 1;
         nextStartIndex = i;
+        nextColumnCount = 1;
+
+        // 最后最后只有一列的情况，换行统计是统计到第三行才能比对第一行和第二行
+        if (i === cellInfos.length - 1) {
+            i++;
+        }
+        else {
+            bChangeRow = false;
+        }
     }
 }
 
@@ -428,6 +527,11 @@ console.log("cellInfoSplitInfo", cellInfoSplitInfo);
 // 根据表格统计信息，拆分数据
 for (let i = 0; i < cellInfoSplitInfo.length; i++) {
     let arrTabel = [];
+
+    // 少于两列的数据不进行展示
+    if (cellInfoSplitInfo[i][0].columnCount < 2) {
+        continue;
+    }
     for (let j = 0; j < cellInfoSplitInfo[i].length; j++) {
         let startIndex = cellInfoSplitInfo[i][j].startIndex;
         let rowData = [];
