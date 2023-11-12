@@ -57,15 +57,15 @@ let cellInfos = [
     // { xsc: 2, xec: 4, ysc: 0, yec: 1, word: "3", id: seq++ },
 
     // // 常规表格
-    // { xsc: 0, xec: 1, ysc: 1, yec: 2, word: "4", id: seq++ },
-    // { xsc: 1, xec: 2, ysc: 1, yec: 2, word: "5", id: seq++ },
-    // { xsc: 2, xec: 3, ysc: 1, yec: 2, word: "6", id: seq++ },
-    // { xsc: 3, xec: 4, ysc: 1, yec: 2, word: "7", id: seq++ },
-    // { xsc: 0, xec: 1, ysc: 2, yec: 3, word: "8", id: seq++ },
-    // { xsc: 1, xec: 2, ysc: 2, yec: 3, word: "9", id: seq++ },
-    // { xsc: 2, xec: 3, ysc: 2, yec: 3, word: "10", id: seq++ },
-    // { xsc: 3, xec: 4, ysc: 2, yec: 3, word: "11", id: seq++ },
-    // // 左侧存在合成表格
+    { xsc: 0, xec: 1, ysc: 1, yec: 2, word: "4", id: seq++ },
+    { xsc: 1, xec: 2, ysc: 1, yec: 2, word: "5", id: seq++ },
+    { xsc: 2, xec: 3, ysc: 1, yec: 2, word: "6", id: seq++ },
+    { xsc: 3, xec: 4, ysc: 1, yec: 2, word: "7", id: seq++ },
+    { xsc: 0, xec: 1, ysc: 2, yec: 3, word: "8", id: seq++ },
+    { xsc: 1, xec: 2, ysc: 2, yec: 3, word: "9", id: seq++ },
+    { xsc: 2, xec: 3, ysc: 2, yec: 3, word: "10", id: seq++ },
+    { xsc: 3, xec: 4, ysc: 2, yec: 3, word: "11", id: seq++ },
+    // 左侧存在合成表格
     { xsc: 0, xec: 1, ysc: 3, yec: 6, word: "12", id: seq++ },
     { xsc: 1, xec: 2, ysc: 3, yec: 4, word: "13", id: seq++ },
     { xsc: 2, xec: 3, ysc: 3, yec: 4, word: "14", id: seq++ },
@@ -106,35 +106,32 @@ console.log("cellInfos: ", cellInfos);
     |_______|_______________|____________|__________|
     |       |               |            |          |
     +-----------------------------------------------+
-    param descri:
+    param descrip:
         arrData         待分析的数据表格
         rowPreIndex     前一行数据第一列在arrData数组中的下标
         rowNextIndex    后一行数据第一列在arrData数组中的下标
         columnCountPre  前一行数据的总的列数
         columnCountNext 后一行数据的总的列数
-
+    return descrip
+        false 相邻两行不满足常规表格的特性
+        true  相邻两行满足常规表格的特性
 */
-function compareRows(arrData, rowPreIndex, rowNextIndex, columnCountPre, columnCountNext)
-{
+
+function compareRows(arrData, preRowStart, nextRowStart, columnCountPre, columnCountNext) {
+    // console.log("1--preRowStart: ", preRowStart, ", nextRowStart: ", nextRowStart, ", columnCountPre: ", columnCountPre);
     if (columnCountPre === columnCountNext) {
-        let tempPreIndex = preStartIndex;
-        let tempNextIndex = nextStartIndex;
-        console.log("++tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
-        for (let tempIndex = 0; tempIndex < preColumnCount; tempIndex++) {
-            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
-            if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
-                cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
-                bSame = false;
-                break;
+        for (let index = 0; index < columnCountPre; index++) {
+            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足常规表格要求
+            if (arrData[preRowStart].xsc !== arrData[nextRowStart].xsc ||
+                arrData[preRowStart].xec !== arrData[nextRowStart].xec) {
+                return false;
             }
-            tempPreIndex++;
-            tempNextIndex++;
+            preRowStart++;
+            nextRowStart++;
         }
+        return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 let preColumnCount = 0;
@@ -143,7 +140,7 @@ let preStartIndex = 0;
 let nextColumnCount = 1;
 let nextStartIndex = 0;
 
-let bNormalSearch = false;  // 记录当前是否有找到一个符合的表格
+let bNormalSearch = false;  // 记录当前是否有找到并且正在统计判断的常规表格
 
 let bSeachAbNormal = false;  // 记录当前是否正在处理涉及合成表格的处理
 
@@ -166,6 +163,8 @@ const cellInfoSplitInfo = [];
 for (let i = 1; i < cellInfos.length; i++) {
     let bSame = true;
     let bChangeRow = false;
+
+    // 判断数组中的表格是否换行了，判断依据是通过ysc,不能通过yec,因为有的单元格占据多行的位置空间
     if (cellInfos[i - 1].ysc !== cellInfos[i].ysc ||
         (cellInfos[i - 1].ysc === cellInfos[i].ysc && i === cellInfos.length - 1)) {
         bChangeRow = true;
@@ -195,57 +194,40 @@ for (let i = 1; i < cellInfos.length; i++) {
             不满足的条件：两行的第一个表格xsc不相同 或者 两行的最后一个表格xec不相同
             满足常规表格的情况下，可以按照常规表格处理，不满足条件的整理出可以按照常规表格处理的部分
         */
-        if (cellInfos[preStartIndex].xsc === cellInfos[nextStartIndex].xsc
-            && cellInfos[preStartIndex + preColumnCount - 1].xec === cellInfos[nextStartIndex + nextColumnCount - 1].xec
-            && !bSeachAbNormal) {
-            if (preColumnCount === nextColumnCount) {
-                let tempPreIndex = preStartIndex;
-                let tempNextIndex = nextStartIndex;
-                console.log("++tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
-                for (let tempIndex = 0; tempIndex < preColumnCount; tempIndex++) {
-                    // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
-                    if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
-                        cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
-                        bSame = false;
-                        break;
-                    }
-                    tempPreIndex++;
-                    tempNextIndex++;
-                }
-            }
-            else {
-                bSame = false;
-            }
 
-            if (bSame) {
+        // 相邻两行各自第一列的起始坐标是否相同
+        let bSameFirstColumn = cellInfos[preStartIndex].xsc === cellInfos[nextStartIndex].xsc ? true : false;
+        // 相邻两行各自第一列的终止坐标是否相同
+        let bSameLastColumn = cellInfos[preStartIndex + preColumnCount - 1].xec === cellInfos[nextStartIndex + nextColumnCount - 1].xec ? true : false;
+
+
+        if (bSameFirstColumn && bSameLastColumn && !bSeachAbNormal) {
+            // 左右坐标都相同，且当前没有合成单元格的情况下，即满足常规表格必要条件之一，还需要采用逐列比较的方式，判断是否符合常规表格性质之一的，同列单元格宽度相同
+            if (compareRows(cellInfos, preStartIndex, nextStartIndex, preColumnCount, nextColumnCount)) {
                 if (!bNormalSearch) {
+                    // 满足常规表格的所有条件，并且比较的是当前表格的第一行和第二行，需要将第一行的数据统计信息记录下
                     bNormalSearch = true;
                     cellInfoSplitInfo.push([
                         {
                             startIndex: preStartIndex,
                             columnCount: preColumnCount
-                        },
-                        {
-                            startIndex: nextStartIndex,
-                            columnCount: nextColumnCount
                         }
                     ]);
                 }
-                else {
-                    cellInfoSplitInfo[cellInfoSplitInfo.length - 1].push(
-                        {
-                            startIndex: nextStartIndex,
-                            columnCount: nextColumnCount
-                        }
-                    );
-                }
+                cellInfoSplitInfo[cellInfoSplitInfo.length - 1].push(
+                    {
+                        startIndex: nextStartIndex,
+                        columnCount: nextColumnCount
+                    }
+                );
             }
-            else if (!bSame && bNormalSearch) {
+            else if (bNormalSearch) {
+                // 最新的一行和上一行比较不满足常规表格的条件，即表示结束了上一个表格的查找
                 bNormalSearch = false;
             }
         }
         else {
-            // 上一行符合常规表格，当前行不符合需要将标志位重置
+            // 不符合常规表格的条件下，假设常规表格紧接着合成表格，就需要将常规表格查找到的标志位重置
             if (bNormalSearch) {
                 bNormalSearch = false;
             }
@@ -388,23 +370,14 @@ for (let i = 1; i < cellInfos.length; i++) {
                             // 合成表格查找完成，数据检测判断
                             if (cellInfos[nextStartIndex].yec === abNormalTabInfo.yecRight) {
                                 for (let tabIndex = 1; tabIndex < abNormalTabInfo.arrTableInfo.length; tabIndex++) {
-                                    if (abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount === abNormalTabInfo.arrTableInfo[tabIndex].columnCount) {
-                                        let tempPreIndex = abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex;
-                                        let tempNextIndex = abNormalTabInfo.arrTableInfo[tabIndex].startIndex;
-                                        console.log("===tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
-                                        for (let tempIndex = 0; tempIndex < abNormalTabInfo.arrTableInfo[tabIndex].columnCount; tempIndex++) {
-                                            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
-                                            if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
-                                                cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
-                                                bSame = false;
-                                                break;
-                                            }
-                                            tempPreIndex++;
-                                            tempNextIndex++;
-                                        }
-                                    }
-                                    else {
-                                        bSame = false;
+
+                                    bSame = compareRows(cellInfos, abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex,
+                                        abNormalTabInfo.arrTableInfo[tabIndex].startIndex,
+                                        abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount,
+                                        abNormalTabInfo.arrTableInfo[tabIndex].columnCount);
+
+                                    if(!bSame)
+                                    {
                                         break;
                                     }
                                 }
@@ -437,23 +410,14 @@ for (let i = 1; i < cellInfos.length; i++) {
                             // 合成表格查找完成，数据检测判断
                             if (cellInfos[nextStartIndex].yec === abNormalTabInfo.yecLeft) {
                                 for (let tabIndex = 1; tabIndex < abNormalTabInfo.arrTableInfo.length; tabIndex++) {
-                                    if (abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount === abNormalTabInfo.arrTableInfo[tabIndex].columnCount) {
-                                        let tempPreIndex = abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex;
-                                        let tempNextIndex = abNormalTabInfo.arrTableInfo[tabIndex].startIndex;
-                                        console.log("===tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
-                                        for (let tempIndex = 0; tempIndex < abNormalTabInfo.arrTableInfo[tabIndex].columnCount; tempIndex++) {
-                                            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
-                                            if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
-                                                cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
-                                                bSame = false;
-                                                break;
-                                            }
-                                            tempPreIndex++;
-                                            tempNextIndex++;
-                                        }
-                                    }
-                                    else {
-                                        bSame = false;
+
+                                    bSame = compareRows(cellInfos, abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex,
+                                        abNormalTabInfo.arrTableInfo[tabIndex].startIndex,
+                                        abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount,
+                                        abNormalTabInfo.arrTableInfo[tabIndex].columnCount);
+
+                                    if(!bSame)
+                                    {
                                         break;
                                     }
                                 }
@@ -486,23 +450,14 @@ for (let i = 1; i < cellInfos.length; i++) {
                             // 合成表格查找完成，数据检测判断
                             if (cellInfos[nextStartIndex].yec === abNormalTabInfo.yecRight) {
                                 for (let tabIndex = 1; tabIndex < abNormalTabInfo.arrTableInfo.length; tabIndex++) {
-                                    if (abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount === abNormalTabInfo.arrTableInfo[tabIndex].columnCount) {
-                                        let tempPreIndex = abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex;
-                                        let tempNextIndex = abNormalTabInfo.arrTableInfo[tabIndex].startIndex;
-                                        console.log("===tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
-                                        for (let tempIndex = 0; tempIndex < abNormalTabInfo.arrTableInfo[tabIndex].columnCount; tempIndex++) {
-                                            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
-                                            if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
-                                                cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
-                                                bSame = false;
-                                                break;
-                                            }
-                                            tempPreIndex++;
-                                            tempNextIndex++;
-                                        }
-                                    }
-                                    else {
-                                        bSame = false;
+
+                                    bSame = compareRows(cellInfos, abNormalTabInfo.arrTableInfo[tabIndex - 1].startIndex,
+                                        abNormalTabInfo.arrTableInfo[tabIndex].startIndex,
+                                        abNormalTabInfo.arrTableInfo[tabIndex - 1].columnCount,
+                                        abNormalTabInfo.arrTableInfo[tabIndex].columnCount);
+
+                                    if(!bSame)
+                                    {
                                         break;
                                     }
                                 }
@@ -559,6 +514,7 @@ for (let i = 1; i < cellInfos.length; i++) {
     }
 }
 
+
 console.log("cellInfoSplitInfo", cellInfoSplitInfo);
 
 // 根据表格统计信息，拆分数据
@@ -593,6 +549,3 @@ finalArr.forEach(val => {
 })
 
 console.log("===================end====================");
-
-
-
