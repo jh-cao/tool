@@ -100,6 +100,43 @@ let cellInfos = [
 
 console.log("cellInfos: ", cellInfos);
 
+/* 比较相邻两行是否符合常规等高等宽的常规表格,类似如下的表格，即满足
+    1、相邻两行的第一列的起始位置和左后一列的结束位置相等的情况即满足常规表格
+    +-----------------------------------------------+
+    |_______|_______________|____________|__________|
+    |       |               |            |          |
+    +-----------------------------------------------+
+    param descri:
+        arrData         待分析的数据表格
+        rowPreIndex     前一行数据第一列在arrData数组中的下标
+        rowNextIndex    后一行数据第一列在arrData数组中的下标
+        columnCountPre  前一行数据的总的列数
+        columnCountNext 后一行数据的总的列数
+
+*/
+function compareRows(arrData, rowPreIndex, rowNextIndex, columnCountPre, columnCountNext)
+{
+    if (columnCountPre === columnCountNext) {
+        let tempPreIndex = preStartIndex;
+        let tempNextIndex = nextStartIndex;
+        console.log("++tempPreIndex: ", tempPreIndex, ", tempNextIndex: ", tempNextIndex);
+        for (let tempIndex = 0; tempIndex < preColumnCount; tempIndex++) {
+            // 相邻两行同一列的表格的左右坐标只要有一侧存在不相等的情况，即不满足表格要求
+            if (cellInfos[tempPreIndex].xsc !== cellInfos[tempNextIndex].xsc ||
+                cellInfos[tempPreIndex].xec !== cellInfos[tempNextIndex].xec) {
+                bSame = false;
+                break;
+            }
+            tempPreIndex++;
+            tempNextIndex++;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
 let preColumnCount = 0;
 let preStartIndex = 0;
 
